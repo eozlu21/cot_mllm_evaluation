@@ -20,7 +20,7 @@ micromamba activate mllm_verifier_env
 cd cot_mllm_evaluation
 
 # 3  Kick off the evaluation – arguments may be overridden by sbatch --export
-srun python -m cot_mllm_evaluation \
+srun python main.py \
     --dataset jmhessel/newyorker_caption_contest \
     --mllm_model Qwen/Qwen2.5-VL-7B-Instruct \
     --judge_model deepseek-ai/DeepSeek-R1-Distill-Qwen-7B \
