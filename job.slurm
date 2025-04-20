@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 #SBATCH -A users                    # account name
 #SBATCH -p mid                      # partition / queue
 #SBATCH --qos=users                 # quality of service
