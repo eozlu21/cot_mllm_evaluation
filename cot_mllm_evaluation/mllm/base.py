@@ -3,9 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Sequence, Protocol
+from dataclasses import dataclass
 
 
-class FewShotExample(Protocol):
+@dataclass(slots=True)
+class FewShotExample():
     """A structural type for few‑shot examples."""
 
     image: Path
