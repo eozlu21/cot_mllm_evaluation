@@ -1,0 +1,42 @@
+from __future__ import annotations
+
+import argparse
+
+from cot_mllm_evaluation.evaluation import Evaluator
+from cot_mllm_evaluation.mllm.huggingface import HuggingFaceMLLM
+from cot_mllm_evaluation.verifier.huggingface import LLMVerifier
+
+
+def _parse_args() -> argparse.Namespace:  # noqa: D401
+    p = argparse.ArgumentParser()
+    p.add_argument("--dataset", default="jmhessel/newyorker_caption_contest")
+    p.add_argument("--mllm_model", default="Qwen/Qwen2.5-VL-7B-Instruct")
+    p.add_argument("--judge_model", default="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
+    p.add_argument("--fewshot", type=int, default=1, help="how many few‑shot examples to sample from the dataset itself")
+    return p.parse_args()
+
+
+def main() -> None:  # noqa: D401
+    args = _parse_args()
+
+    from random import sample
+    import datasets
+
+    raw = datasets.load_dataset(args.dataset, split="train")
+    fewshot = sample(list(raw), k=args.fewshot) if args.fewshot else None
+
+    mllm = HuggingFaceMLLM(args.mllm_model)
+    verifier = LLMVerifier(args.judge_model)
+
+    evaluator = Evaluator(
+        args.dataset,
+        mllm=mllm,
+        verifier=verifier,
+        fewshot=fewshot,
+    )
+    evaluator.run()
+    print(f"Accuracy: {evaluator.accuracy:.2%}  ({evaluator.stats['correct']}/{evaluator.stats['total']})")
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()
