@@ -1,12 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=cot-eval
-#SBATCH --output=logs/%x_%j.out
-#SBATCH --error=logs/%x_%j.err
-#SBATCH --partition=gpu            # adjust to your cluster’s GPU queue
-#SBATCH --gres=gpu:a100:1           # 1× A100
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=128G
-#SBATCH --time=12:00:00
+#!/bin/bash
+#SBATCH -A users                    # account name
+#SBATCH -p mid                      # partition / queue
+#SBATCH --qos=users                 # quality of service
+#SBATCH --gres=gpu:a100:1           # request 1 A100 GPU
+#SBATCH -c 4                        # request 4 CPU cores
+#SBATCH --mem=128G                  # request 128 GB RAM
+#SBATCH --time=1-00:00:00           # max runtime (1 day)
+#SBATCH -o results/results_%j.txt   # STDOUT log
+#SBATCH -e errors/errors_%j.txt     # STDERR log
+#SBATCH --mail-type=ALL             # email on start,end,fail
+#SBATCH --mail-user=eozlu21@ku.edu.tr  # change to your e‑mail
 
 # 1  Activate pre‑created micromamba env
 source ~/micromamba/etc/profile.d/micromamba.sh
