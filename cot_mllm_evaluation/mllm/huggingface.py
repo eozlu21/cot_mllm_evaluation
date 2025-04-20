@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Sequence, Union
 
 import torch
 from PIL import Image
@@ -45,12 +45,12 @@ class HuggingFaceMLLM(BaseMLLM):
             fewshot: Sequence[FewShotExample] | None = None,
             temperature: float = 0.2,
     ) -> str:
-        image_tok = getattr(self.processor.tokenizer, "image_token", "<image>")
+        image_tok = self.processor.tokenizer.image_token
         prompt_parts: list[str] = [
             "You are an art critic. Write an uncanny literal description of the cartoon.\n"
         ]
         all_images: list[Image.Image] = []
-
+        print("Image Tok: " + image_tok)
         if fewshot:
             for ex in fewshot:
                 prompt_parts.append(f"{image_tok}\n")
@@ -58,10 +58,8 @@ class HuggingFaceMLLM(BaseMLLM):
                 if isinstance(ex.image, (str, Path)):
                     print(f"Loading fewshot example image from path: {ex.image}")
                     all_images.append(Image.open(ex.image))
-                else:
-                    print("Warning: Fewshot example image is not a valid path or PIL image.")
-                    all_images.append(ex.image)  # assuming ex.image is already a PIL.Image.Image
 
+        prompt_parts.append(f"{image_tok}\nDescription:")
         prompt_parts.append(f"{image_tok}\nDescription:")
         prompt_text = "".join(prompt_parts)
 
