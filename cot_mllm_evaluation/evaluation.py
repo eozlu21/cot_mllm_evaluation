@@ -24,7 +24,7 @@ class Evaluator:
             fewshot: Iterable[FewShotExample] | None = None,
             answer_field: str = "image_uncanny_description",
     ) -> None:
-        self.dataset = datasets.load_dataset(dataset_name,name= "explanation" ,split="train").select(range(3))  # type: ignore[arg‑type]
+        self.dataset = datasets.load_dataset(dataset_name,name= "explanation" ,split="train")  # type: ignore[arg‑type]
         self.mllm = mllm
         self.verifier = verifier
         self.fewshot = list(fewshot or [])
