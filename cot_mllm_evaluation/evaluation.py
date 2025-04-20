@@ -23,8 +23,12 @@ class Evaluator:
             verifier: BaseVerifier,
             fewshot: Iterable[FewShotExample] | None = None,
             answer_field: str = "image_uncanny_description",
+            num_samples: int | None = None,
     ) -> None:
-        self.dataset = datasets.load_dataset(dataset_name,name= "explanation" ,split="train")  # type: ignore[arg‑type]
+        if num_samples is None:
+            self.dataset = datasets.load_dataset(dataset_name,name= "explanation" ,split="train")
+        else:
+            self.dataset = datasets.load_dataset(dataset_name,name= "explanation" ,split="train").select(range(num_samples)) # type: ignore[arg‑type]
         self.mllm = mllm
         self.verifier = verifier
         self.fewshot = list(fewshot or [])
@@ -34,7 +38,7 @@ class Evaluator:
     # --------------------------------------------------
     def run(self) -> None:
         for row in self.dataset:
-            print("Row:", row)
+            #print("Row:", row)
             image_raw = row.get("image")
             if not image_raw:
                 print(f"Skipping row with missing image: {row}")
@@ -57,6 +61,7 @@ class Evaluator:
             
             guess: str = self.mllm.prompt(image_path, fewshot=self.fewshot)
             correct: bool = self.verifier.verify(gold, guess)
+            print(f"Image: {image_path}, Gold: {gold}, Guess: {guess}, Correct: {correct}")
             self.stats["total"] += 1
             if correct:
                 self.stats["correct"] += 1

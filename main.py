@@ -13,6 +13,7 @@ def _parse_args() -> argparse.Namespace:  # noqa: D401
     p.add_argument("--mllm_model", default="Qwen/Qwen2.5-VL-7B-Instruct")
     p.add_argument("--judge_model", default="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B")
     p.add_argument("--fewshot", type=int, default=1, help="how many few‑shot examples to sample from the dataset itself")
+    p.add_argument("--num_samples", type=int, nargs="?", default=None, help="number of samples to evaluate")
     return p.parse_args()
 
 
@@ -35,12 +36,14 @@ def main() -> None:  # noqa: D401
     mllm = HuggingFaceMLLM(args.mllm_model)
     print("Loading verifier...")
     verifier = LLMVerifier(args.judge_model)
+    num_samples = args.num_samples if args.num_samples else None
     print("Evaluating...")
     evaluator = Evaluator(
         args.dataset,
         mllm=mllm,
         verifier=verifier,
         fewshot=fewshot, # type: ignore
+        num_samples=num_samples
     )
     evaluator.run()
     print("Done.")
