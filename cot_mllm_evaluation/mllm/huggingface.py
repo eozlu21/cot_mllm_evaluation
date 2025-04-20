@@ -45,6 +45,7 @@ class HuggingFaceMLLM(BaseMLLM):
             fewshot: Sequence[FewShotExample] | None = None,
             temperature: float = 0.2,
     ) -> str:
+        image_tok = getattr(self.processor.tokenizer, "image_token", "<image>")
         prompt_parts: list[str] = [
             "You are an art critic. Write an uncanny literal description of the cartoon.\n"
         ]
@@ -52,14 +53,16 @@ class HuggingFaceMLLM(BaseMLLM):
 
         if fewshot:
             for ex in fewshot:
-                prompt_parts.append("<image>\n")
+                prompt_parts.append(f"{image_tok}\n")
                 prompt_parts.append(f"{ex.text}\n")
                 if isinstance(ex.image, (str, Path)):
+                    print(f"Loading fewshot example image from path: {ex.image}")
                     all_images.append(Image.open(ex.image))
                 else:
+                    print("Warning: Fewshot example image is not a valid path or PIL image.")
                     all_images.append(ex.image)  # assuming ex.image is already a PIL.Image.Image
 
-        prompt_parts.append("<image>\nDescription:")
+        prompt_parts.append(f"{image_tok}\nDescription:")
         prompt_text = "".join(prompt_parts)
 
         all_images.append(Image.open(image))  # the actual test image
