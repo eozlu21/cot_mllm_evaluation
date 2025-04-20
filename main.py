@@ -21,20 +21,24 @@ def main() -> None:  # noqa: D401
 
     from random import sample
     import datasets
-
-    raw = datasets.load_dataset(args.dataset, split="train")
+    print("Loading dataset...")
+    raw = datasets.load_dataset(args.dataset, name="explanation", split="train")
+    print("Creating fewshot examples...")
     fewshot = sample(list(raw), k=args.fewshot) if args.fewshot else None
-
+    print("Loading models...")
+    print("Loading MLLM...")
     mllm = HuggingFaceMLLM(args.mllm_model)
+    print("Loading verifier...")
     verifier = LLMVerifier(args.judge_model)
-
+    print("Evaluating...")
     evaluator = Evaluator(
         args.dataset,
         mllm=mllm,
         verifier=verifier,
-        fewshot=fewshot,
+        fewshot=fewshot, # type: ignore
     )
     evaluator.run()
+    print("Done.")
     print(f"Accuracy: {evaluator.accuracy:.2%}  ({evaluator.stats['correct']}/{evaluator.stats['total']})")
 
 

@@ -2,7 +2,8 @@ datasets>=2.18
 transformers>=4.40
 torch>=2.2
 tqdm>=4.66
-
+hf_xet >= 1.0.3
+pillow >= 11.2.1
 # Optional dev extras:
 mypy>=1.10
 black>=24.3.0
