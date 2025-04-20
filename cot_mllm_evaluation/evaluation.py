@@ -34,6 +34,7 @@ class Evaluator:
     # --------------------------------------------------
     def run(self) -> None:
         for row in self.dataset:
+            print("Row:", row)
             image_raw = row.get("image")
             if not image_raw:
                 print(f"Skipping row with missing image: {row}")
