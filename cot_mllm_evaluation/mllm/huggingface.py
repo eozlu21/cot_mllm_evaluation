@@ -12,6 +12,7 @@ from transformers import (
 )
 
 from .base import BaseMLLM, FewShotExample
+from ..utils import load_pil
 
 
 @dataclass(slots=True)
@@ -45,36 +46,52 @@ class HuggingFaceMLLM(BaseMLLM):
             fewshot: Sequence[FewShotExample] | None = None,
             temperature: float = 0.2,
     ) -> str:
-        image_tok = self.processor.tokenizer.image_token
-        prompt_parts: list[str] = [
-            "You are an art critic. Write an uncanny literal description of the cartoon.\n"
-        ]
-        all_images: list[Image.Image] = []
-        print("Image Tok: " + image_tok)
+        # 1) Build a “chat” structure with image/text messages
+        messages = []
+        images: list[Image.Image] = []
+
         if fewshot:
             for ex in fewshot:
-                prompt_parts.append(f"{image_tok}\n")
-                prompt_parts.append(f"{ex.text}\n")
-                if isinstance(ex.image, (str, Path)):
-                    print(f"Loading fewshot example image from path: {ex.image}")
-                    all_images.append(Image.open(ex.image))
+                # one user turn showing the example image + text
+                messages.append({
+                    "role": "user",
+                    "content": [
+                        {"type": "image"},
+                        {"type": "text", "text": ex.text}
+                    ],
+                })
+                images.append(load_pil(ex.image))
 
-        prompt_parts.append(f"{image_tok}\nDescription:")
-        prompt_parts.append(f"{image_tok}\nDescription:")
-        prompt_text = "".join(prompt_parts)
+        # final user turn: your actual prompt
+        messages.append({
+            "role": "user",
+            "content": [
+                {"type": "image"},
+                {"type": "text", "text": "You are an art critic. Write an uncanny literal description of the cartoon."}
+            ],
+        })
+        images.append(load_pil(image))
 
-        all_images.append(Image.open(image))  # the actual test image
-
+        # 2) Let the HF processor build the input_ids + align images
+        chat_text = self.processor.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
         inputs = self.processor(
-            text=prompt_text,
-            images=all_images,
+            text=[chat_text],
+            images=images,
             return_tensors="pt",
         ).to(self.device)
 
+        # 3) Generate and decode
         outputs = self.model.generate(
             **inputs,
             temperature=temperature,
             **self.generate_kwargs,
         )
-        return self.processor.batch_decode(outputs, skip_special_tokens=True)[0].strip()
+        return self.processor.batch_decode(
+            outputs,
+            skip_special_tokens=True
+        )[0].strip()
 
