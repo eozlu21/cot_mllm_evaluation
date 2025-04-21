@@ -48,20 +48,29 @@ class HuggingFaceMLLM(BaseMLLM):
 
         if fewshot:
             for ex in fewshot:
+                # 1) user turn: show image and instruction
                 messages.append({
                     "role": "user",
                     "content": [
                         {"type": "image"},
-                        {"type": "text", "text": ex.text}
+                        {"type": "text", "text": "You are a comedy expert and uncanny‑description specialist. Given a cartoon image, identify its single most bizarre or unexpected element and write a concise, one‑sentence uncanny description. Focus only on the odd detail without any extra commentary."}
                     ],
                 })
                 images.append(load_pil(ex.image))
+
+                # 2) assistant turn: show the ground‑truth uncanny description
+                messages.append({
+                    "role": "assistant",
+                    "content": [
+                        {"type": "text", "text": ex.text}
+                    ],
+                })
 
         messages.append({
             "role": "user",
             "content": [
                 {"type": "image"},
-                {"type": "text", "text": "You are a comedy expert. Write the uncanny description of the cartoon. You are essentially finding out what is unusual in this cartoon that could be used to come up with a funny caption. Write one sentence only."}
+                {"type": "text", "text": "You are a comedy expert and uncanny‑description specialist. Given a cartoon image, identify its single most bizarre or unexpected element and write a concise, one‑sentence uncanny description. Focus only on the odd detail without any extra commentary."}
             ],
         })
         images.append(load_pil(image))
