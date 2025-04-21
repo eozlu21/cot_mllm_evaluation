@@ -61,7 +61,7 @@ class HuggingFaceMLLM(BaseMLLM):
             "role": "user",
             "content": [
                 {"type": "image"},
-                {"type": "text", "text": "You are an art critic. Write an uncanny literal description of the cartoon."}
+                {"type": "text", "text": "You are a comedy expert. Write the uncanny description of the cartoon. You are essentially finding out what is unusual in this cartoon that could be used to come up with a funny caption. Write one sentence only."}
             ],
         })
         images.append(load_pil(image))
