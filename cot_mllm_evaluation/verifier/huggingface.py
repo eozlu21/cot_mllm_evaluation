@@ -23,14 +23,17 @@ class LLMVerifier(BaseVerifier):
     @torch.inference_mode()
     def verify(self, reference: str, prediction: str) -> bool:  # noqa: D401
         prompt = (
-            "You are a strict grader.  Answer only with ‘yes’ or ‘no’.\n"
+            "User: You are a strict grader.  Answer only with ‘yes’ or ‘no’.\n"
             f"Reference: {reference}\n"
             f"Prediction: {prediction}\n"
-            "Are these two descriptions semantically equivalent?"
+            "Are these two descriptions semantically equivalent?\n"
+            "Assistant: "
         )
         encoded = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         generated = self.model.generate(**encoded, max_new_tokens=1)
         print(f"Prompt provided to verifier: {prompt}")
+        print("\n" * 2)
         answer = self.tokenizer.decode(generated[0], skip_special_tokens=False).lower()
         print(f"Generated answer by verifier: {answer}")
+        print("\n" * 2)
         return "yes" in answer
