@@ -61,7 +61,7 @@ class Evaluator:
             
             guess: str = self.mllm.prompt(image_path, fewshot=self.fewshot)
             correct: bool = self.verifier.verify(gold, guess)
-            print(f"Image: {image_path}\nGold: {gold}\nGuess: {guess}\nCorrect: {correct}")
+            #print(f"Image: {image_path}\nGold: {gold}\nGuess: {guess}\nCorrect: {correct}")
             self.stats["total"] += 1
             if correct:
                 self.stats["correct"] += 1

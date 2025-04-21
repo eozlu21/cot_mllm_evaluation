@@ -27,17 +27,14 @@ class HuggingFaceMLLM(BaseMLLM):
     device: str = "cuda:0" if torch.cuda.is_available() else "cpu"
     generate_kwargs: dict[str, Any] | None = None
 
-    # ------------------------------------------------------------------
-    def __post_init__(self) -> None:  # noqa: D401 – pydocstyle quirk
+    def __post_init__(self) -> None:
         self.processor = AutoProcessor.from_pretrained(self.model_name)
         self.model = AutoModelForImageTextToText.from_pretrained(
             self.model_name,
             torch_dtype=torch.float16,
         ).to(self.device)
-        # default generation kwargs unless user overrides
-        self.generate_kwargs = self.generate_kwargs or {"max_new_tokens": 64}
+        self.generate_kwargs = self.generate_kwargs or {"max_new_tokens": 256}
 
-    # ------------------------------------------------------------------
     @torch.inference_mode()
     def prompt(
             self,
@@ -46,13 +43,11 @@ class HuggingFaceMLLM(BaseMLLM):
             fewshot: Sequence[FewShotExample] | None = None,
             temperature: float = 0.2,
     ) -> str:
-        # 1) Build a “chat” structure with image/text messages
-        messages = []
+        messages: list[dict[str, Union[str, list[dict[str, str]]]]] = []
         images: list[Image.Image] = []
 
         if fewshot:
             for ex in fewshot:
-                # one user turn showing the example image + text
                 messages.append({
                     "role": "user",
                     "content": [
@@ -62,7 +57,6 @@ class HuggingFaceMLLM(BaseMLLM):
                 })
                 images.append(load_pil(ex.image))
 
-        # final user turn: your actual prompt
         messages.append({
             "role": "user",
             "content": [
@@ -72,7 +66,6 @@ class HuggingFaceMLLM(BaseMLLM):
         })
         images.append(load_pil(image))
 
-        # 2) Let the HF processor build the input_ids + align images
         chat_text = self.processor.apply_chat_template(
             messages,
             tokenize=False,
@@ -84,14 +77,17 @@ class HuggingFaceMLLM(BaseMLLM):
             return_tensors="pt",
         ).to(self.device)
 
-        # 3) Generate and decode
         outputs = self.model.generate(
             **inputs,
             temperature=temperature,
             **self.generate_kwargs,
         )
-        return self.processor.batch_decode(
-            outputs,
-            skip_special_tokens=True
-        )[0].strip()
 
+        # Slice off the prompt tokens to keep only generated response
+        input_length = inputs.input_ids.shape[-1]
+        gen_ids = outputs[0, input_length:]
+        response = self.processor.batch_decode(
+            [gen_ids],
+            skip_special_tokens=True,
+        )[0].strip()
+        return response
