@@ -31,6 +31,6 @@ class LLMVerifier(BaseVerifier):
         encoded = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         generated = self.model.generate(**encoded, max_new_tokens=1)
         print(f"Prompt provided to verifier: {prompt}")
-        answer = self.tokenizer.decode(generated[1], skip_special_tokens=True).lower()
+        answer = self.tokenizer.decode(generated[0], skip_special_tokens=False).lower()
         print(f"Generated answer by verifier: {answer}")
         return "yes" in answer
