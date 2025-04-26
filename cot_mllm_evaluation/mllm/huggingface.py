@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Sequence, Union
+from typing import Any, Sequence
 
 import torch
 from PIL import Image
@@ -12,7 +12,6 @@ from transformers import (
 )
 
 from .base import BaseMLLM, FewShotExample
-from ..utils import load_pil
 
 
 @dataclass(slots=True)
@@ -27,76 +26,42 @@ class HuggingFaceMLLM(BaseMLLM):
     device: str = "cuda:0" if torch.cuda.is_available() else "cpu"
     generate_kwargs: dict[str, Any] | None = None
 
-    def __post_init__(self) -> None:
+    # ------------------------------------------------------------------
+    def __post_init__(self) -> None:  # noqa: D401 – pydocstyle quirk
         self.processor = AutoProcessor.from_pretrained(self.model_name)
         self.model = AutoModelForImageTextToText.from_pretrained(
             self.model_name,
             torch_dtype=torch.float16,
         ).to(self.device)
-        self.generate_kwargs = self.generate_kwargs or {"max_new_tokens": 256}
+        # default generation kwargs unless user overrides
+        self.generate_kwargs = self.generate_kwargs or {"max_new_tokens": 1048}
 
+    # ------------------------------------------------------------------
     @torch.inference_mode()
     def prompt(
             self,
-            image: Path,
+            image: PIL.Image,
+            prompt: str,
             *,
             fewshot: Sequence[FewShotExample] | None = None,
             temperature: float = 0.2,
-    ) -> str:
-        messages: list[dict[str, Union[str, list[dict[str, str]]]]] = []
-        images: list[Image.Image] = []
+    ) -> str:  # noqa: D401
+        # Build text prompt with optional few‑shot blocks.
+        pil_image = image
 
-        if fewshot:
-            for ex in fewshot:
-                # 1) user turn: show image and instruction
-                messages.append({
-                    "role": "user",
-                    "content": [
-                        {"type": "image"},
-                        {"type": "text", "text": "You are a comedy expert and uncanny‑description specialist. Given a cartoon image, identify its single most bizarre or unexpected element and write a concise, one‑sentence uncanny description. Focus only on the odd detail without any extra commentary."}
-                    ],
-                })
-                images.append(load_pil(ex.image))
-
-                # 2) assistant turn: show the ground‑truth uncanny description
-                messages.append({
-                    "role": "assistant",
-                    "content": [
-                        {"type": "text", "text": ex.text}
-                    ],
-                })
-
-        messages.append({
-            "role": "user",
-            "content": [
-                {"type": "image"},
-                {"type": "text", "text": "You are a comedy expert and uncanny‑description specialist. Given a cartoon image, identify its single most bizarre or unexpected element and write a concise, one‑sentence uncanny description. Focus only on the odd detail without any extra commentary."}
-            ],
-        })
-        images.append(load_pil(image))
-
-        chat_text = self.processor.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True,
-        )
-        inputs = self.processor(
-            text=[chat_text],
-            images=images,
+        processed = self.processor(
+            text=prompt,
+            images=pil_image,
             return_tensors="pt",
         ).to(self.device)
 
+        
+        input_ids = processed["input_ids"]
+        attention_mask = processed["attention_mask"]
+
         outputs = self.model.generate(
-            **inputs,
-            temperature=temperature,
+            input_ids=input_ids,
+            attention_mask=attention_mask,
             **self.generate_kwargs,
         )
-
-        # Slice off the prompt tokens to keep only generated response
-        input_length = inputs.input_ids.shape[-1]
-        gen_ids = outputs[0, input_length:]
-        response = self.processor.batch_decode(
-            [gen_ids],
-            skip_special_tokens=True,
-        )[0].strip()
-        return response
+        return self.processor.batch_decode(outputs, skip_special_tokens=True)[0].strip()
