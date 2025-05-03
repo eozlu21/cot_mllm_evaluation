@@ -1,37 +1,0 @@
-Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.17s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.72s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.79s/it]
-Sliding Window Attention is enabled but not implemented for `sdpa`; unexpected results may be encountered.
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.88s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.80s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.81s/it]
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/home/havural24/cot_mllm_evaluation/main.py", line 50, in <module>
-    main()
-  File "/home/havural24/cot_mllm_evaluation/main.py", line 32, in main
-    verifier = LLMVerifier(args.judge_model)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<string>", line 5, in __init__
-  File "/home/havural24/cot_mllm_evaluation/cot_mllm_evaluation/verifier/huggingface.py", line 18, in __post_init__
-    self.model = AutoModelForCausalLM.from_pretrained(self.model_name).to(self.device)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/havural24/micromamba/envs/temp_env/lib/python3.12/site-packages/transformers/modeling_utils.py", line 3698, in to
-    return super().to(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/havural24/micromamba/envs/temp_env/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1355, in to
-    return self._apply(convert)
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/home/havural24/micromamba/envs/temp_env/lib/python3.12/site-packages/torch/nn/modules/module.py", line 915, in _apply
-    module._apply(fn)
-  File "/home/havural24/micromamba/envs/temp_env/lib/python3.12/site-packages/torch/nn/modules/module.py", line 915, in _apply
-    module._apply(fn)
-  File "/home/havural24/micromamba/envs/temp_env/lib/python3.12/site-packages/torch/nn/modules/module.py", line 915, in _apply
-    module._apply(fn)
-  [Previous line repeated 2 more times]
-  File "/home/havural24/micromamba/envs/temp_env/lib/python3.12/site-packages/torch/nn/modules/module.py", line 942, in _apply
-    param_applied = fn(param)
-                    ^^^^^^^^^
-  File "/home/havural24/micromamba/envs/temp_env/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1341, in convert
-    return t.to(
-           ^^^^^
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 260.00 MiB. GPU 0 has a total capacity of 44.45 GiB of which 125.31 MiB is free. Process 709539 has 21.14 GiB memory in use. Including non-PyTorch memory, this process has 23.18 GiB memory in use. Of the allocated memory 22.60 GiB is allocated by PyTorch, and 331.95 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
-srun: error: ai18: task 0: Exited with exit code 1

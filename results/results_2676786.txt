@@ -15520,3 +15520,1229 @@ Output in strict JSON format:
 ]
 }
 ```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect of the image for a New Yorker reader is the improbable and unrealistic nature of the interaction between the human and the fish, which is meant to be humorous through its absurdity. The cartoon plays on the idea of the unpredictability of animal behavior, which is a recurring theme in New Yorker humor.
+Prediction: There is a naked man in the water. The fish is on land and it has a human arm.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanny aspect of the image for a New Yorker reader is the improbable and unrealistic nature of the interaction between the human and the fish, which is meant to be humorous through its absurdity. The cartoon plays on the idea of the unpredictability of animal behavior, which is a recurring theme in New Yorker humor.
+[Verification after retry] False
+
+[Retry Strategy: Backtracking] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Shifting to a New Yorker reader perspective"
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Layered Social Meaning",
+    "content": "The image depicts a human and a fish in an unusual interaction, where the fish appears to be chasing the human. This scenario is highly improbable in real life, as fish do not possess the cognitive ability or physical capability to chase humans in such a manner. The humor lies in the absurdity of the situation, which is a common theme in New Yorker cartoons. The image could be interpreted as a commentary on the unpredictable nature of human-animal interactions, possibly hinting at the idea that even animals can exhibit unexpected behaviors."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanny aspect of the image for a New Yorker reader is the improbable and unrealistic nature of the interaction between the human and the fish, which is meant to be humorous through its absurdity. The cartoon plays on the idea of the unpredictability of animal behavior, which is a recurring theme in New Yorker humor."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+You must revise your previous reasoning attempt by identifying an **incorrect assumption** made during the analysis and tracing how it affected the final conclusion.
+
+Your Chain of Thought must follow:
+1. **Verification**: Clearly state the flawed assumption that led to the incorrect conclusion.
+2. **Inner Thinking**: Build a new reasoning chain that corrects that assumption.
+3. **Final Conclusion**: Present the revised conclusion.
+4. **Verification**: Assess if the new reasoning is more valid.
+
+Your Final Conclusion must directly follow from the revised Inner Thinking steps. Do not reuse or rephrase prior conclusions unless your new logic genuinely supports them.
+
+Output format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Flawed assumption: [state it]"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect of the image for a New Yorker reader is the commentary on the unpredictability of human-animal interactions, which is a recurring theme in New Yorker humor.
+Prediction: There is a naked man in the water. The fish is on land and it has a human arm.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanny aspect of the image for a New Yorker reader is the commentary on the unpredictability of human-animal interactions, which is a recurring theme in New Yorker humor.
+[Verification after retry] False
+
+[Retry Strategy: Verification] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Flawed assumption: The image is intended to be humorous through the absurdity of the situation."
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Correcting the Assumption",
+    "content": "The image is not intended to be humorous through the absurdity of the situation; rather, it is a commentary on the unpredictability of human-animal interactions. The fish's behavior is not meant to be realistic but rather to highlight the unexpected nature of such interactions."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanny aspect of the image for a New Yorker reader is the commentary on the unpredictability of human-animal interactions, which is a recurring theme in New Yorker humor."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+1. First, identify whether the Final Conclusion accurately describes the uncanniness of the cartoon image.
+2. If incorrect, choose **one generic reason** why the reasoning is flawed from the list below:
+
+- "Missed key contradiction in the scene"
+- "Focused on a normal element, not the uncanny one"
+- "Misinterpreted an unusual object or behavior"
+- "Reasoning lacks support from visual cues"
+- "Uncanny factor mentioned, but not clearly explained"
+- "Multiple uncanny elements, but reasoning fixated on the wrong one"
+
+3. Then start a new reasoning attempt based on that flaw.
+   - Your **Inner Thinking** must take a different path than the prior reasoning.
+   - Your **Final Conclusion** must be directly supported by the revised Inner Thinking steps and must fix the earlier mistake without introducing new ones.
+   - Your **Verification** step must explain why the conclusion logically follows from the current reasoning.
+
+Output in this exact JSON format:
+
+```json
+{
+    "CoT": [
+        {"action": "Verification", "content": "Reasoning flaw: [insert selected category here]"},
+        {"action": "Inner Thinking", "title": "...", "content": "..."},
+        ...
+        {"action": "Final Conclusion", "content": "..."},
+        {"action": "Verification", "content": "..."}
+    ]}```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness of the image lies in the absurdity of a fish chasing a human, which is not a common or expected interaction between these two species.
+Prediction: There is a naked man in the water. The fish is on land and it has a human arm.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness of the image lies in the absurdity of a fish chasing a human, which is not a common or expected interaction between these two species.
+[Verification after retry] False
+320
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect arises from the unexpected presence of modern technology next to a medieval setting.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect arises from the unexpected presence of modern technology next to a medieval setting.
+Prediction: There is a huge table full of food outside the castle walls, which is suspicious.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+531
+
+[Q] What is uncanny about the image?
+[Conclusion] The image is uncanny due to the incongruity between the presence of giraffes in a domestic setting.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The image is uncanny due to the incongruity between the presence of giraffes in a domestic setting.
+Prediction: It is unusual for animals to be acting like people in the living room of a house.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+465
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect arises from the incongruity between the formal and professional demeanor of the men and the mundane, almost chaotic scene of people sleeping on the floor.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect arises from the incongruity between the formal and professional demeanor of the men and the mundane, almost chaotic scene of people sleeping on the floor.
+Prediction: It's unusual to see a large crack in a floor of a building but to also have lots of people standing in the crack with their eyes open is very unusual.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+540
+
+[Q] What is uncanny about the image?
+[ERROR] No JSON block found in response.
+[Skip] Could not parse CoT.
+146
+
+[Q] What is uncanny about the image?
+[ERROR] No JSON block found in response.
+[Skip] Could not parse CoT.
+218
+
+[Q] What is uncanny about the image?
+[ERROR] No JSON block found in response.
+[Skip] Could not parse CoT.
+65
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanniness is due to the robots' appearance resembling humans yet having mechanical features.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness is due to the robots' appearance resembling humans yet having mechanical features.
+Prediction: Robots generally don't hold positions on company boards, so, the fact that they are voting evokes the notion of robot takeovers. The single person voting yes is betraying the other humans, which is why the boss is mad at him.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+673
+
+[Q] What is uncanny about the image?
+[ERROR] No JSON block found in response.
+[Skip] Could not parse CoT.
+11
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect arises from the blend of historical and modern elements in a single, seemingly ordinary scene.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect arises from the blend of historical and modern elements in a single, seemingly ordinary scene.
+Prediction: It is unusual to see such a mix of people in the same lineup. It is also unusual for a dog to be holding a rifle.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+331
+
+[Q] What is uncanny about the image?
+[ERROR] No JSON block found in response.
+[Skip] Could not parse CoT.
+206
+
+[Q] What is uncanny about the image?
+[ERROR] No JSON block found in response.
+[Skip] Could not parse CoT.
+425
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect of the image is the presence of a bed in a control room, which is an unusual and unexpected element.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect of the image is the presence of a bed in a control room, which is an unusual and unexpected element.
+Prediction: There is a grave in an office. Graves belong outside.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[Verification] False
+
+[Retry Strategy: Persona Shift] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Inner Thinking",
+    "title": "Observation of Elements",
+    "content": "The image shows two men in a control room with a bed next to the control panel."
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Unusual Element Identification",
+    "content": "The presence of a bed in a control room is unusual and unexpected."
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Implication Analysis",
+    "content": "The bed's presence suggests that there might be something wrong or out of place in the scene."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanny aspect of the image is the presence of a bed in a control room, which is an unusual and unexpected element."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+Now view the cartoon through the eyes of a **long-time New Yorker magazine reader**. Consider the kind of subtle absurdities, cultural critiques, or ironic twists typical of New Yorker humor.
+
+
+1. **Inner Thinking**: Interpret the visual scene through the lens of layered social meaning, contradiction, or dry humor.
+2. **Final Conclusion**: Suggest what may feel uncanny to such a reader.
+3. **Verification**: Evaluate whether this perspective uncovers a new dimension of uncanniness.
+
+Your Final Conclusion must emerge logically from the Inner Thinking steps using this reader persona.
+
+Your Verification must confirm that the conclusion is fully supported by your persona-based interpretation.
+
+Output in strict JSON format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Shifting to a New Yorker reader perspective"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    ...
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny feeling arises from the incongruity between the professional setting of a control room and the presence of a bed, which is typically associated with personal rest. This juxtaposition challenges the viewer's expectations and highlights the absurdity of prioritizing work over personal needs.
+Prediction: There is a grave in an office. Graves belong outside.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[New Conclusion] The uncanny feeling arises from the incongruity between the professional setting of a control room and the presence of a bed, which is typically associated with personal rest. This juxtaposition challenges the viewer's expectations and highlights the absurdity of prioritizing work over personal needs.
+[Verification after retry] True
+469
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect of the image lies in the mechanical horse's humanoid design, which contrasts with the organic appearance of the other horse.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect of the image lies in the mechanical horse's humanoid design, which contrasts with the organic appearance of the other horse.
+Prediction: Mechanical horses do not exist and could not exist back then.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+34
+
+[Q] What is uncanny about the image?
+[Conclusion] The image is uncanny because it features a ghostly figure in a mundane setting, which is not common and creates a sense of unease.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The image is uncanny because it features a ghostly figure in a mundane setting, which is not common and creates a sense of unease.
+Prediction: A vampire that looks like Dracula is in a woman's bedroom.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+310
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect of the image lies in the juxtaposition of military personnel in a domestic setting, which is typically not associated with such individuals. This contrast creates a sense of unease and curiosity.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect of the image lies in the juxtaposition of military personnel in a domestic setting, which is typically not associated with such individuals. This contrast creates a sense of unease and curiosity.
+Prediction: The warzone being juxtaposed with the calm and normal living room is unusual, because one would think that the man and the woman wouldn't be so calm if they knew this was going to happen. Furthermore, only the man seems to have noticed the war/soldiers, as the woman just keeps reading.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+186
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect arises from the exaggerated size of the figure, which contrasts with the natural setting and the human figures.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect arises from the exaggerated size of the figure, which contrasts with the natural setting and the human figures.
+Prediction: The Commandments are written in East Asian lettering.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[Verification] False
+
+[Retry Strategy: Verification] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Inner Thinking",
+    "title": "Identifying the Figure",
+    "content": "The figure holding the tablets resembles Moses from the biblical story of receiving the Ten Commandments."
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Analyzing the Proportions",
+    "content": "The figure is disproportionately large compared to the landscape and the people around it."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanny aspect arises from the exaggerated size of the figure, which contrasts with the natural setting and the human figures."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+1. First, identify whether the Final Conclusion accurately describes the uncanniness of the cartoon image.
+2. If incorrect, choose **one generic reason** why the reasoning is flawed from the list below:
+
+- "Missed key contradiction in the scene"
+- "Focused on a normal element, not the uncanny one"
+- "Misinterpreted an unusual object or behavior"
+- "Reasoning lacks support from visual cues"
+- "Uncanny factor mentioned, but not clearly explained"
+- "Multiple uncanny elements, but reasoning fixated on the wrong one"
+
+3. Then start a new reasoning attempt based on that flaw.
+   - Your **Inner Thinking** must take a different path than the prior reasoning.
+   - Your **Final Conclusion** must be directly supported by the revised Inner Thinking steps and must fix the earlier mistake without introducing new ones.
+   - Your **Verification** step must explain why the conclusion logically follows from the current reasoning.
+
+Output in this exact JSON format:
+
+```json
+{
+    "CoT": [
+        {"action": "Verification", "content": "Reasoning flaw: [insert selected category here]"},
+        {"action": "Inner Thinking", "title": "...", "content": "..."},
+        ...
+        {"action": "Final Conclusion", "content": "..."},
+        {"action": "Verification", "content": "..."}
+    ]}```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness stems from the exaggerated size of the figure, which creates a sense of otherworldliness and disorientation.
+Prediction: The Commandments are written in East Asian lettering.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness stems from the exaggerated size of the figure, which creates a sense of otherworldliness and disorientation.
+[Verification after retry] False
+
+[Retry Strategy: Persona Shift] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Reasoning flaw: 'Focused on a normal element, not the uncanny one'"
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Re-evaluating the Proportions",
+    "content": "The disproportionate size of the figure is indeed the uncanny element. The figure's height dwarfs the landscape and the people, creating a surreal and unsettling effect."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanniness stems from the exaggerated size of the figure, which creates a sense of otherworldliness and disorientation."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+Now view the cartoon through the eyes of a **long-time New Yorker magazine reader**. Consider the kind of subtle absurdities, cultural critiques, or ironic twists typical of New Yorker humor.
+
+
+1. **Inner Thinking**: Interpret the visual scene through the lens of layered social meaning, contradiction, or dry humor.
+2. **Final Conclusion**: Suggest what may feel uncanny to such a reader.
+3. **Verification**: Evaluate whether this perspective uncovers a new dimension of uncanniness.
+
+Your Final Conclusion must emerge logically from the Inner Thinking steps using this reader persona.
+
+Your Verification must confirm that the conclusion is fully supported by your persona-based interpretation.
+
+Output in strict JSON format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Shifting to a New Yorker reader perspective"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    ...
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness arises from the juxtaposition of the biblical narrative with a modern, almost surreal depiction. The oversized figure holding the tablets creates a sense of otherworldliness and disorientation, which is a common theme in New Yorker humor.
+Prediction: The Commandments are written in East Asian lettering.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness arises from the juxtaposition of the biblical narrative with a modern, almost surreal depiction. The oversized figure holding the tablets creates a sense of otherworldliness and disorientation, which is a common theme in New Yorker humor.
+[Verification after retry] False
+
+[Retry Strategy: Backtracking] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Shifting to a New Yorker reader perspective"
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Layered Social Meaning",
+    "content": "This cartoon plays on the biblical story of Moses receiving the Ten Commandments, but with a humorous twist. The exaggerated size of the figure holding the tablets creates an uncanny effect, as it seems out of place in the natural landscape. This could be interpreted as a commentary on the often disproportionate influence of religious figures or institutions in society."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanniness arises from the juxtaposition of the biblical narrative with a modern, almost surreal depiction. The oversized figure holding the tablets creates a sense of otherworldliness and disorientation, which is a common theme in New Yorker humor."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+You must revise your previous reasoning attempt by identifying an **incorrect assumption** made during the analysis and tracing how it affected the final conclusion.
+
+Your Chain of Thought must follow:
+1. **Verification**: Clearly state the flawed assumption that led to the incorrect conclusion.
+2. **Inner Thinking**: Build a new reasoning chain that corrects that assumption.
+3. **Final Conclusion**: Present the revised conclusion.
+4. **Verification**: Assess if the new reasoning is more valid.
+
+Your Final Conclusion must directly follow from the revised Inner Thinking steps. Do not reuse or rephrase prior conclusions unless your new logic genuinely supports them.
+
+Output format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Flawed assumption: [state it]"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness in the image arises from the combination of the exaggerated figure holding the tablets and the people's reaction to it, symbolizing the often disproportionate influence of religious figures or institutions in society.
+Prediction: The Commandments are written in East Asian lettering.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness in the image arises from the combination of the exaggerated figure holding the tablets and the people's reaction to it, symbolizing the often disproportionate influence of religious figures or institutions in society.
+[Verification after retry] False
+
+[Retry Strategy: Exploring New Paths] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Flawed assumption: The uncanniness is solely due to the exaggerated size of the figure holding the tablets."
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Revised Reasoning",
+    "content": "The uncanniness in this image is multifaceted. While the oversized figure holding the tablets does create a surreal effect, it also serves as a visual metaphor for the disproportionate influence of religious figures or institutions in society. The scene's setting, with people looking up at the figure, adds to the uncanny feeling, suggesting a divine or authoritative presence that is both imposing and somewhat unsettling."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanniness in the image arises from the combination of the exaggerated figure holding the tablets and the people's reaction to it, symbolizing the often disproportionate influence of religious figures or institutions in society."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+You must now pursue a **completely different interpretation** of what makes the cartoon uncanny.
+
+1. Do not reuse any reasoning points or visual elements from the prior attempt.
+2. Explore elements or relationships that were previously ignored.
+3. Avoid repeating sentence structures or vocabulary.
+4. Your **Final Conclusion** must directly follow from the Inner Thinking steps in this response.
+5. Your **Verification** must confirm that the Final Conclusion is clearly supported by those steps. If not, revise the reasoning.
+
+
+Respond in strict JSON format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Exploring new reasoning path"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness in the image stems from the contrast between the human figure and the divine symbols they hold, creating a sense of otherworldly power and authority that challenges the viewer's perception of reality.
+Prediction: The Commandments are written in East Asian lettering.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness in the image stems from the contrast between the human figure and the divine symbols they hold, creating a sense of otherworldly power and authority that challenges the viewer's perception of reality.
+[Verification after retry] False
+
+[Retry Strategy: Correction] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Exploring new reasoning path"
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Revised Reasoning",
+    "content": "The uncanniness in this image can be attributed to the stark contrast between the human figure and the divine symbols they hold. The oversized figure, holding the tablets, creates a sense of otherworldliness and power that is not typically associated with human beings. This juxtaposition of the human and the divine evokes a feeling of unease, as it challenges the viewer's perception of reality and authority. The people looking up at the figure further emphasize the figure's elevated status, which can be unsettling when compared to the mundane nature of everyday life."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanniness in the image stems from the contrast between the human figure and the divine symbols they hold, creating a sense of otherworldly power and authority that challenges the viewer's perception of reality."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+Identify the specific flaw in the previous reasoning (e.g., a faulty logical step or unsupported observation), then revise **only** the affected parts while preserving sound logic.
+
+Format:
+1. **Verification**: Identify which part of the reasoning (by title or content) was flawed.
+2. **Inner Thinking**: Rewrite the reasoning to correct that specific error.
+3. **Final Conclusion**: Provide the corrected conclusion.
+4. **Verification**: Assess if the revised reasoning is now well supported.
+
+The Final Conclusion must be directly derived from the corrected Inner Thinking steps — not from previous conclusions.
+
+The Verification must confirm that the conclusion is now fully supported by the revised reasoning path.
+
+Output format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Correction target: [step title or reasoning type]"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness in the image is due to the exaggerated size of the human figure holding the tablets, which contrasts with the smaller figures below, creating a sense of otherworldliness and power that challenges the viewer's perception of the human figure's authority.
+Prediction: The Commandments are written in East Asian lettering.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness in the image is due to the exaggerated size of the human figure holding the tablets, which contrasts with the smaller figures below, creating a sense of otherworldliness and power that challenges the viewer's perception of the human figure's authority.
+[Verification after retry] False
+338
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect of the image is the oversized book that looks like a real library, allowing the child to interact with it as if it were a physical structure.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect of the image is the oversized book that looks like a real library, allowing the child to interact with it as if it were a physical structure.
+Prediction: There is a book the size of a room in front of the man.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[Verification] True
+53
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanny aspect is the combination of reading a newspaper and watching television in the same setting, which is not typical.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny aspect is the combination of reading a newspaper and watching television in the same setting, which is not typical.
+Prediction: Insects cannot do human-like things let alone be bigger than an adult female.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[Verification] False
+
+[Retry Strategy: Exploring New Paths] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Inner Thinking",
+    "title": "Identifying Unusual Elements",
+    "content": "The image shows a person in bed with a newspaper covering them, and a television screen is visible through the newspaper."
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Analyzing the Context",
+    "content": "Reading a newspaper and watching television are usually separate activities, but here they are merged in an unexpected manner."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanny aspect is the combination of reading a newspaper and watching television in the same setting, which is not typical."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+You must now pursue a **completely different interpretation** of what makes the cartoon uncanny.
+
+1. Do not reuse any reasoning points or visual elements from the prior attempt.
+2. Explore elements or relationships that were previously ignored.
+3. Avoid repeating sentence structures or vocabulary.
+4. Your **Final Conclusion** must directly follow from the Inner Thinking steps in this response.
+5. Your **Verification** must confirm that the Final Conclusion is clearly supported by those steps. If not, revise the reasoning.
+
+
+Respond in strict JSON format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Exploring new reasoning path"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanny element is the integration of reading a newspaper and watching television within the same physical space, creating a unique and unexpected scenario.
+Prediction: Insects cannot do human-like things let alone be bigger than an adult female.
+Assistant:
+
+Generated raw tokens: tensor([9834], device='cuda:0')
+
+Decoded answer: yes
+
+[New Conclusion] The uncanny element is the integration of reading a newspaper and watching television within the same physical space, creating a unique and unexpected scenario.
+[Verification after retry] True
+577
+
+[Q] What is uncanny about the image?
+[Conclusion] The uncanniness arises from the absurdity of a refrigerator being used as a TV and having a person inside it, which defies normal expectations and creates a sense of the bizarre or eerie.
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness arises from the absurdity of a refrigerator being used as a TV and having a person inside it, which defies normal expectations and creates a sense of the bizarre or eerie.
+Prediction: There is a vendor inside their home.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[Verification] False
+
+[Retry Strategy: Exploring New Paths] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Inner Thinking",
+    "title": "Unconventional Use of Appliance",
+    "content": "A refrigerator is being used as a TV, which is an unexpected and unconventional use."
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Presence of Person Inside Refrigerator",
+    "content": "The presence of a person inside the refrigerator adds to the surreal nature of the scene."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanniness arises from the absurdity of a refrigerator being used as a TV and having a person inside it, which defies normal expectations and creates a sense of the bizarre or eerie."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+You must now pursue a **completely different interpretation** of what makes the cartoon uncanny.
+
+1. Do not reuse any reasoning points or visual elements from the prior attempt.
+2. Explore elements or relationships that were previously ignored.
+3. Avoid repeating sentence structures or vocabulary.
+4. Your **Final Conclusion** must directly follow from the Inner Thinking steps in this response.
+5. Your **Verification** must confirm that the Final Conclusion is clearly supported by those steps. If not, revise the reasoning.
+
+
+Respond in strict JSON format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Exploring new reasoning path"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness stems from the anthropomorphic quality of the refrigerator, which behaves like a living room fixture, making it feel both familiar and strange at the same time.
+Prediction: There is a vendor inside their home.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness stems from the anthropomorphic quality of the refrigerator, which behaves like a living room fixture, making it feel both familiar and strange at the same time.
+[Verification after retry] False
+
+[Retry Strategy: Verification] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Exploring new reasoning path"
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Human Interaction with Unusual Object",
+    "content": "The cartoon depicts a person interacting with a refrigerator in a manner that suggests a level of familiarity and comfort, as if it were a living room appliance. This unusual interaction creates a sense of uncanniness because it blurs the line between everyday objects and human-like behavior."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanniness stems from the anthropomorphic quality of the refrigerator, which behaves like a living room fixture, making it feel both familiar and strange at the same time."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+1. First, identify whether the Final Conclusion accurately describes the uncanniness of the cartoon image.
+2. If incorrect, choose **one generic reason** why the reasoning is flawed from the list below:
+
+- "Missed key contradiction in the scene"
+- "Focused on a normal element, not the uncanny one"
+- "Misinterpreted an unusual object or behavior"
+- "Reasoning lacks support from visual cues"
+- "Uncanny factor mentioned, but not clearly explained"
+- "Multiple uncanny elements, but reasoning fixated on the wrong one"
+
+3. Then start a new reasoning attempt based on that flaw.
+   - Your **Inner Thinking** must take a different path than the prior reasoning.
+   - Your **Final Conclusion** must be directly supported by the revised Inner Thinking steps and must fix the earlier mistake without introducing new ones.
+   - Your **Verification** step must explain why the conclusion logically follows from the current reasoning.
+
+Output in this exact JSON format:
+
+```json
+{
+    "CoT": [
+        {"action": "Verification", "content": "Reasoning flaw: [insert selected category here]"},
+        {"action": "Inner Thinking", "title": "...", "content": "..."},
+        ...
+        {"action": "Final Conclusion", "content": "..."},
+        {"action": "Verification", "content": "..."}
+    ]}```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness in the image is due to the refrigerator's anthropomorphic qualities, which make it seem both familiar and strange.
+Prediction: There is a vendor inside their home.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness in the image is due to the refrigerator's anthropomorphic qualities, which make it seem both familiar and strange.
+[Verification after retry] False
+
+[Retry Strategy: Correction] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Reasoning flaw: 'Focused on a normal element, not the uncanny one'"
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Human Interaction with Unusual Object",
+    "content": "The cartoon shows a person interacting with a refrigerator in a way that makes it appear as if it's a living room appliance. The uncanniness arises from the refrigerator's ability to mimic human-like behavior, such as having a face and displaying a menu. This interaction creates a sense of discomfort due to the blurring of boundaries between a household object and a living being."
+  },
+  {
+    "action": "Final Conclusion",
+    "content": "The uncanniness in the image is due to the refrigerator's anthropomorphic qualities, which make it seem both familiar and strange."
+  }
+]
+</previous reasoning>
+
+<response requirements>
+Identify the specific flaw in the previous reasoning (e.g., a faulty logical step or unsupported observation), then revise **only** the affected parts while preserving sound logic.
+
+Format:
+1. **Verification**: Identify which part of the reasoning (by title or content) was flawed.
+2. **Inner Thinking**: Rewrite the reasoning to correct that specific error.
+3. **Final Conclusion**: Provide the corrected conclusion.
+4. **Verification**: Assess if the revised reasoning is now well supported.
+
+The Final Conclusion must be directly derived from the corrected Inner Thinking steps — not from previous conclusions.
+
+The Verification must confirm that the conclusion is now fully supported by the revised reasoning path.
+
+Output format:
+```json
+{
+"CoT": [
+    {"action": "Verification", "content": "Correction target: [step title or reasoning type]"},
+    {"action": "Inner Thinking", "title": "...", "content": "..."},
+    {"action": "Final Conclusion", "content": "..."},
+    {"action": "Verification", "content": "..."}
+]
+}
+```
+
+Prompt provided to verifier: You are a strict grader. Answer only with yes or no (lowercase), nothing else. You will answer this question: Are the reference and prediction semantically equivalent?
+Example 1:
+Reference: A doctor treats patients in a hospital.
+Prediction: A physician cares for individuals in a healthcare facility.
+Assistant: yes
+
+Example 2:
+Reference: The sky is green.
+Prediction: The grass is blue.
+Assistant: no
+
+Reference: The uncanniness in the image is due to the refrigerator's anthropomorphic qualities, which make it seem both familiar and strange.
+Prediction: There is a vendor inside their home.
+Assistant:
+
+Generated raw tokens: tensor([902], device='cuda:0')
+
+Decoded answer: no
+
+[New Conclusion] The uncanniness in the image is due to the refrigerator's anthropomorphic qualities, which make it seem both familiar and strange.
+[Verification after retry] False
+
+[Retry Strategy: Persona Shift] Prompt:
+<question>
+What is uncanny about the image?
+</question>
+<|image|>
+<previous reasoning>
+[
+  {
+    "action": "Verification",
+    "content": "Focused on a normal element, not the uncanny one"
+  },
+  {
+    "action": "Inner Thinking",
+    "title": "Human Interaction with Unusual Object",
+    "content": "The cartoon depicts a refrigerator that has been designed to look like a living room, complete with a face and a menu. This anthropomorphism creates an uncanny effect because it blurs the line between a household appliance and a living being. The interaction between the people and the refrigerator, where it appears to be a social space, adds to the uncanniness."
+  },
