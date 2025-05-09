@@ -249,8 +249,8 @@ class CoTEvaluator:
                 question = "What do you observe in this image?"
             else:
                 raise ValueError("Invalid explanation type. Choose either 'uncanny' or 'canny'.")
-            print(next(self.mllm.parameters()).device)
-            print(next(self.verifier.parameters()).device)
+            print("MLLM device:", next(self.mllm.model.parameters()).device)
+            print("Verifier device:", next(self.verifier.model.parameters()).device)
             print(f"\n[Q] {question}")
             prompt_text = self.format_prompt(question)
 
