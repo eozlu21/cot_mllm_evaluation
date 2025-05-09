@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Sequence
 
+import PIL
 import torch
 from PIL import Image
 from transformers import (
@@ -46,12 +47,14 @@ class HuggingFaceMLLM(BaseMLLM):
             self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 self.model_name,
                 trust_remote_code=True,
+                device_map="auto",
                 torch_dtype=torch.bfloat16
             ).to("cuda").eval()
         else:
             self.processor = AutoProcessor.from_pretrained(self.model_name)
             self.model = AutoModelForImageTextToText.from_pretrained(
                 self.model_name,
+                device_map="auto",
                 torch_dtype=torch.float16,
             ).to(self.device)
         self.image_token = getattr(self.processor.tokenizer, "image_token", "<|image|>")

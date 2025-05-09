@@ -15,7 +15,10 @@ class LLMVerifier(BaseVerifier):
 
     def __post_init__(self) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self.model = AutoModelForCausalLM.from_pretrained(self.model_name).to(self.device)
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_name,
+            device_map="auto"
+        )
 
     @torch.inference_mode()
     def verify(self, reference: str, prediction: str) -> bool:
