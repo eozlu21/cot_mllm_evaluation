@@ -1,0 +1,4 @@
+/var/spool/slurm/d/job2327328/slurm_script: line 15: /kuacc/users/eozlu21/micromamba/etc/profile.d/micromamba.sh: Böyle bir dosya ya da dizin yok
+critical libmamba Shell not initialized
+/usr/bin/python: can't open file 'main.py': [Errno 2] No such file or directory
+srun: error: ai17: task 0: Exited with exit code 2

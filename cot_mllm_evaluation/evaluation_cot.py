@@ -247,7 +247,9 @@ class CoTEvaluator:
             elif (self.explanation_type == "canny"):
                 answer = item["image_description"]
                 question = "What do you observe in this image?"
-            print(f"\n[Q] {question}")
+            print(next(self.mllm.parameters()).device)
+      	    print(next(self.verifier.parameters()).device)
+	    print(f"\n[Q] {question}")
             prompt_text = self.format_prompt(question)
 
             response = self.mllm.prompt(

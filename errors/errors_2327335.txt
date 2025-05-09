@@ -1,0 +1,6 @@
+/var/spool/slurm/d/job2327335/slurm_script: line 15: /kuacc/users/eozlu21/micromamba/etc/profile.d/micromamba.sh: Böyle bir dosya ya da dizin yok
+critical libmamba Shell not initialized
+  File "main.py", line 1
+    from __future__ import annotations
+    ^
+SyntaxError: future feature annotations is not defined
