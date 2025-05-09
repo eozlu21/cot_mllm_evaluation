@@ -55,6 +55,8 @@ You must now pursue a **completely different interpretation** of what makes the 
 4. Your **Final Conclusion** must directly follow from the Inner Thinking steps in this response.
 5. Your **Verification** must confirm that the Final Conclusion is clearly supported by those steps. If not, revise the reasoning.
 
+Your Final Conclusion must directly follow from the revised Inner Thinking steps. Do not reuse or rephrase prior conclusions unless your new logic genuinely supports them.
+
 
 Respond in strict JSON format:
 ```json
@@ -92,6 +94,9 @@ Respond in strict JSON format:
    - Your **Final Conclusion** must be directly supported by the revised Inner Thinking steps and must fix the earlier mistake without introducing new ones.
    - Your **Verification** step must explain why the conclusion logically follows from the current reasoning.
 
+
+Your Final Conclusion must directly follow from the revised Inner Thinking steps. Do not reuse or rephrase prior conclusions unless your new logic genuinely supports them.
+
 Output in this exact JSON format:
 
 ```json
@@ -121,7 +126,7 @@ Format:
 3. **Final Conclusion**: Provide the corrected conclusion.
 4. **Verification**: Assess if the revised reasoning is now well supported.
 
-The Final Conclusion must be directly derived from the corrected Inner Thinking steps — not from previous conclusions.
+Your Final Conclusion must directly follow from the revised Inner Thinking steps. Do not reuse or rephrase prior conclusions unless your new logic genuinely supports them.
 
 The Verification must confirm that the conclusion is now fully supported by the revised reasoning path.
 
@@ -154,6 +159,8 @@ Now view the cartoon through the eyes of a **long-time New Yorker magazine reade
 3. **Verification**: Evaluate whether this perspective uncovers a new dimension of uncanniness.
 
 Your Final Conclusion must emerge logically from the Inner Thinking steps using this reader persona.
+
+Your Final Conclusion must directly follow from the revised Inner Thinking steps. Do not reuse or rephrase prior conclusions unless your new logic genuinely supports them.
 
 Your Verification must confirm that the conclusion is fully supported by your persona-based interpretation.
 
@@ -227,7 +234,7 @@ class CoTEvaluator:
     def run(self):
         print("Loading dataset split...")
         dataset = load_dataset(self.dataset_name, name="explanation", split="train")
-        dataset = dataset.select(range(500))
+        #dataset = dataset.select(range(50)) # <-- Selects 50 instances from the dataset.
 
 
         for item in dataset:
@@ -235,7 +242,8 @@ class CoTEvaluator:
             self.stats["total"] += 1
             if (self.explanation_type == "uncanny"):
                 answer = item["image_uncanny_description"]
-                question = "What is uncanny about the image?"
+                #question = "Analyze the visual composition of the cartoon. What makes it feel surreal, exaggerated, or unusual?"
+                question = "Analyze the visual scene and identify elements that contrast with what we expect in normal situations. Which visual or contextual contradictions might contribute to the cartoon’s humor or surreal effect?"
             elif (self.explanation_type == "canny"):
                 answer = item["image_description"]
                 question = "What do you observe in this image?"

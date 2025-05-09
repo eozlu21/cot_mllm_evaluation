@@ -10,6 +10,8 @@ from transformers import (
     AutoModelForImageTextToText,
     AutoProcessor,
 )
+from transformers import Qwen2_5_VLForConditionalGeneration
+
 from typing import List, Tuple
 from cot_mllm_evaluation.mllm.base import BaseMLLM, FewShotExample
 
@@ -38,11 +40,20 @@ class HuggingFaceMLLM(BaseMLLM):
     """
         
     def __post_init__(self) -> None:
-        self.processor = AutoProcessor.from_pretrained(self.model_name)
-        self.model = AutoModelForImageTextToText.from_pretrained(
-            self.model_name,
-            torch_dtype=torch.float16,
-        ).to(self.device)
+
+        if self.model_name == "Fancy-MLLM/R1-Onevision-7B":
+            self.processor = AutoProcessor.from_pretrained(self.model_name, trust_remote_code=True)
+            self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                self.model_name,
+                trust_remote_code=True,
+                torch_dtype=torch.bfloat16
+            ).to("cuda").eval()
+        else:
+            self.processor = AutoProcessor.from_pretrained(self.model_name)
+            self.model = AutoModelForImageTextToText.from_pretrained(
+                self.model_name,
+                torch_dtype=torch.float16,
+            ).to(self.device)
         self.image_token = getattr(self.processor.tokenizer, "image_token", "<|image|>")
         self.generate_kwargs = self.generate_kwargs or {"max_new_tokens": 1048}
 

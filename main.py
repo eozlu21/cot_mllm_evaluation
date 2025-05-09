@@ -39,7 +39,7 @@ def main() -> None:  # noqa: D401
     )
     cot_evaluator.run()
     print("Done.")
-    cot_evaluator.save_results(f"cot_output_{args.explanation_type}_revised_prompts.json")
+    cot_evaluator.save_results(f"cot_output_{args.explanation_type}_v3.json")
     print("Saved.")
 
 
