@@ -11,7 +11,7 @@ def _parse_args() -> argparse.Namespace:  # noqa: D401
     p = argparse.ArgumentParser()
     p.add_argument("--dataset", default="jmhessel/newyorker_caption_contest")
     p.add_argument("--mllm_model", default="Qwen/Qwen2.5-VL-7B-Instruct")
-    p.add_argument("--judge_model", default="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
+    p.add_argument("--judge_model", default="deepseek-ai/DeepSeek-R1-Distill-Qwen-14B")
     p.add_argument("--fewshot", type=int, default=1, help="how many few‑shot examples to sample from the dataset itself")
     p.add_argument("--explanation_type", default="uncanny", choices=["uncanny", "canny"])
 
